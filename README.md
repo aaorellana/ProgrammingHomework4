@@ -15,3 +15,4 @@ Command Value Priority
 * R A 12 : raises the priority of A from 10 to 12
 * M A 10 : prints out the max priority
 
+for commands E, M, the second and third parameter can be anything, the parameters wont change the way it works
