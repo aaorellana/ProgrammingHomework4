@@ -18,3 +18,10 @@ Command Value Priority
 for commands E, M, the second and third parameter can be anything, the parameters wont change the way it works,
 for the R command the second parameter is the value of which priority needs to be raised needs to be raised, 
 the third parameter is the new priority for that value
+
+##Make commands
+* make all: similar to make, it creates the executables 
+* make run: starts the Queue program
+* make: creates the executables
+* make clean: cleans the project
+
