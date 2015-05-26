@@ -15,5 +15,6 @@ Command Value Priority
 * R A 12 : raises the priority of A from 10 to 12
 * M A 10 : prints out the max priority
 
-for commands E, M, the second and third parameter can be anything, the parameters wont change the way it works
-for the R command the value of which priority needs to be raised needs to be given, the third parameter is the new priority
+for commands E, M, the second and third parameter can be anything, the parameters wont change the way it works,
+for the R command the second parameter is the value of which priority needs to be raised needs to be raised, 
+the third parameter is the new priority for that value
