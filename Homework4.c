@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {   
 	char *func = argv[1];
 	int i;
-	int newar[500];
+	int priorityArray[500];
 	int heapSize = 0;
 	
 	struct Tuple tuple_list[500];
@@ -20,24 +20,24 @@ int main(int argc, char *argv[])
     			  //sets the arguments for the new array to pass to the function
     			  for(i = 0; i < heapSize; i++)
 				  {
-					newar[i + 1] = strtol(argv[i + 2], NULL, 10);
+					priorityArray[i + 1] = strtol(argv[i + 2], NULL, 10);
 				  }
-    			  buildMaxHeap(newar, heapSize);
+    			  buildMaxHeap(priorityArray, heapSize);
     		break;
-    	case 's': queue(newar, tuple_list, &heapSize);
+    	case 's': queue(priorityArray, tuple_list, &heapSize);
     	default: puts("command not found");	
     }
     //prints out array
     for(i = 1; i <= heapSize; i++)
 	{
-		printf("%d ", newar[i]);
+		printf("%d ", priorityArray[i]);
 	}
 	puts("\n");
 	
 	return 0;
 }
 
-void queue(int *newar, struct Tuple *tuple_list, int *heapSize)
+void queue(int *priorityArray, struct Tuple *tuple_list, int *heapSize)
 {
 	char value;
 	int priority;
@@ -49,68 +49,13 @@ void queue(int *newar, struct Tuple *tuple_list, int *heapSize)
 	
 	while(1)
 	{
-		scanf("\n%c %c %d", &command, &value, &priority);
+		scanf("\n%c %c %d", &command, &value, &priority);//reads user input
 		
-		if(command == 'I')//inserts a new value with a priority
-		{
-			maxHeapInsert(newar, priority,  heapSize);
-			tuple_list[*heapSize].value = value;
-			tuple_list[*heapSize].priority = priority;
-			
-			buildMaxHeap(newar, *heapSize);//restores the max heap
-			
-			printQueue(newar, *heapSize);
+		commands(command, value, priority, priorityArray, heapSize, tuple_list);//runs the appropriate command given
 
-		}
-		if(command == 'E')//extracts the max value with its priority
-		{
-			if(*heapSize >= 1)
-			{		
-				printf("Value: %c, Priority: %d\n", tuple_list[1].value, tuple_list[1].priority);
-				heapExtractMax(newar, heapSize);
-
-				printQueue(newar, *heapSize);
-				
-				swapTuples(tuple_list, newar, *heapSize, 1);
-			}
-			else
-			{
-				puts("There is nothing else to extract");
-			}	
-		}
-		if(command == 'R')//increases the priority R A 8 increases A with the priority of 8
-		{
-			if(*heapSize >= 1)
-			{
-				for(i = 1; i <= *heapSize; i++)
-				{	
-					if(tuple_list[i].value == value)
-					{
-						num = tuple_list[i].priority;
-						tuple_list[i].priority = priority;//changes priority in the tuple list
-						for(j = 1; j <= *heapSize; j++)
-						{
-							if(newar[j] == num)
-							{
-								heapIncreaseKey(newar, j, priority);
-								buildMaxHeap(newar, *heapSize);//restores the max heap
-							}
-						}		
-					}
-				
-				}
-			}	
-			
-			printQueue(newar, *heapSize);
-		}
-		if(command == 'M')//prints out the max priority
-		{
-			printf("Max Priority: %d", heapMaximum(newar));
-		}
+		buildMaxHeap(priorityArray, *heapSize);//heapifies the array
 		
-		buildMaxHeap(newar, *heapSize);
-		
-		swapTuples(tuple_list, newar, *heapSize, 0);
+		swapTuples(tuple_list, priorityArray, *heapSize, 0);//mirrors the tuple array to the priority array
 
 		puts("\n");
 		
@@ -118,27 +63,27 @@ void queue(int *newar, struct Tuple *tuple_list, int *heapSize)
 	
 }
 
-void printQueue(int *array, int heapSize)
+void printQueue(int *array, int heapSize)//prints out queue
 {
 	int i;
-	for(i = 1; i <= heapSize; i++)//prints out queue
+	for(i = 1; i <= heapSize; i++)
 	{
 		printf("%d, ", array[i]);
 	}
 	
 }
 
-void swapTuples(struct Tuple *tuple_list, int *newar, int heapSize, int cases)
+void swapTuples(struct Tuple *tuple_list, int *priorityArray, int heapSize, int cases)
 {
 	struct Tuple tuple;
 	int i;
 	int j;
 				
-	for(i = 1; i <= heapSize; i++)//makes tuples_list priority mirror newar priority
+	for(i = 1; i <= heapSize; i++)//makes tuples_list priority mirror priorityArray priority
 	{
 		for(j = i; j <= heapSize + cases; j++)
 		{
-			if(newar[i] == tuple_list[j].priority)
+			if(priorityArray[i] == tuple_list[j].priority)
 			{	
 				//swap tuples
 				tuple.value = tuple_list[i].value;
@@ -150,4 +95,76 @@ void swapTuples(struct Tuple *tuple_list, int *newar, int heapSize, int cases)
 			}
 		}
 	}				
+}
+
+void commands(int command, int value, int priority, int *priorityArray, int *heapSize, struct Tuple *tuple_list)
+{
+	int i;
+	int j;
+	int num;
+	if(command == 'I')//inserts a new value with a priority
+	{
+		maxHeapInsert(priorityArray, priority,  heapSize);
+		tuple_list[*heapSize].value = value;
+		tuple_list[*heapSize].priority = priority;
+			
+		buildMaxHeap(priorityArray, *heapSize);//restores the max heap
+			
+		printQueue(priorityArray, *heapSize);
+
+	}
+	if(command == 'E')//extracts the max value with its priority
+	{
+		if(*heapSize >= 1)
+		{		
+			printf("Value: %c, Priority: %d\n", tuple_list[1].value, tuple_list[1].priority);
+			heapExtractMax(priorityArray, heapSize);
+
+			printQueue(priorityArray, *heapSize);
+				
+			swapTuples(tuple_list, priorityArray, *heapSize, 1);
+		}
+		else
+		{
+			puts("There is nothing else to extract");
+		}	
+	}
+	if(command == 'R')//increases the priority R A 8 increases A with the priority of 8
+	{
+		if(*heapSize >= 1)
+		{
+			raisePriority(value, priority, priorityArray, heapSize, tuple_list);
+		}	
+			
+		printQueue(priorityArray, *heapSize);
+		}
+		if(command == 'M')//prints out the max priority
+		{
+			printf("Max Priority: %d", heapMaximum(priorityArray));
+		}
+}
+
+void raisePriority(int value, int priority, int *priorityArray, int *heapSize, struct Tuple *tuple_list)//raises the priority
+{
+	int i;
+	int j;
+	int num;
+	
+	for(i = 1; i <= *heapSize; i++)
+	{	
+		if(tuple_list[i].value == value)
+		{
+			num = tuple_list[i].priority;
+			tuple_list[i].priority = priority;//changes priority in the tuple list
+			for(j = 1; j <= *heapSize; j++)
+			{
+				if(priorityArray[j] == num)
+				{
+					heapIncreaseKey(priorityArray, j, priority);//changes the priority in the priority array
+					buildMaxHeap(priorityArray, *heapSize);//restores the max heap
+				}
+			}		
+		}
+	}
+	
 }

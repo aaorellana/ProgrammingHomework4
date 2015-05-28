@@ -46,7 +46,7 @@ int test(int *array1, int *array2, int begin, int end)
 	int i;
 	int passed = 1; //1 means true
 	
-	for(i = begin; i < end; i++)
+	for(i = begin; i < end; i++)//compare elements of both arrays
 	{
 		if(array1[i] != array2[i])
 		{
