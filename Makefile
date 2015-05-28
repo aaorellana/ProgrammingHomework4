@@ -8,4 +8,5 @@ run:
 	./Homework4 start
 
 clean:
-	rm -f queue
+	rm -f Homework4
+	rm -f TestHomework4
